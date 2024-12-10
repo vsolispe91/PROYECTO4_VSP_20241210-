@@ -1,0 +1,64 @@
+<!DOCTYPE module PUBLIC "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+        "https://checkstyle.sourceforge.io/dtds/configuration_1_3.dtd">
+<module name="Checker">
+    <module name="TreeWalker">
+        <module name="JavadocMethod">
+            <property name="scope" value="public"/>
+            <property name="allowMissingParamTags" value="true"/>
+        </module>
+        <module name="WhitespaceAfter">
+            <property name="tokens" value="ASSIGN,CTOR_CALL,DEC,EMPTY_SPACE,EXPR,HEX_ID,INC,LAB,LPAREN,LT,MINUS,NOT,NUM_INT,NUM_LONG,OBJ_LIT,SEMI,SL_COMMENT,ST,STMT,STRING_LITERAL,VOID_METHOD_CALL"/>
+        </module>
+        <module name="WhitespaceAround">
+            <property name="tokens" value="ASSIGN,CTOR_CALL,DEC,EMPTY_SPACE,EXPR,HEX_ID,INC,LAB,LPAREN,LT,MINUS,NOT,NUM_INT,NUM_LONG,OBJ_LIT,SEMI,ST,STMT,STRING_LITERAL,VOID_METHOD_CALL"/>
+        </module>
+        <module name="JavadocType">
+            <property name="scope" value="public"/>
+            <property name="allowMissingParamTags" value="true"/>
+        </module>
+        <module name="LineLength">
+            <property name="max" value="100"/>
+        </module>
+        <module name="FileTabCharacter">
+        </module>
+        <module name="NoWhitespaceAfter">
+            <property name="tokens" value="DOT,ENUM_CONSTANT,IDENTIFIER,INDEX_OP,KEYWORD,ANNOTATION"/>
+        </module>
+        <module name="NoWhitespaceBefore">
+            <property name="tokens" value="DOT,ENUM_CONSTANT,IDENTIFIER,INDEX_OP,KEYWORD,ANNOTATION"/>
+        </module>
+        <module name="NeedBraces">
+            <property name="tokens" value="CATCH,CTOR_DEF,DO,ELSE,FOR,IF,INIT,LAB,TRY,WHILE"/>
+        </module>
+        <module name="RightCurly">
+            <property name="tokens" value="CATCH,CTOR_DEF,DO,ELSE,FOR,IF,INIT,LAB,TRY,WHILE"/>
+        </module>
+        <module name="LeftCurly">
+            <property name="tokens" value="CATCH,CTOR_DEF,DO,ELSE,FOR,IF,INIT,LAB,TRY,WHILE"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="message" value="Illegal single line comment."/>
+            <property name="format" value="^[^\\s].*&#10;"/>
+        </module>
+        <module name="RegexpMultilineJava">
+            <property name="message" value="Illegal multi-line comment."/>
+            <property name="format" value="^[^\\s].*&#10;"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="message" value="Illegal single line comment."/>
+            <property name="format" value="^[^\\s].*&#10;"/>
+        </module>
+        <module name="RegexpMultilineJava">
+            <property name="message" value="Illegal multi-line comment."/>
+            <property name="format" value="^[^\\s].*&#10;"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="message" value="Illegal single line comment."/>
+            <property name="format" value="^[^\\s].*&#10;"/>
+        </module>
+        <module name="RegexpMultilineJava">
+            <property name="message" value="Illegal multi-line comment."/>
+            <property name="format" value="^[^\\s].*&#10;"/>
+        </module>
+    </module>
+</module>
