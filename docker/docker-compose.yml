@@ -1,0 +1,101 @@
+version: '3.8'
+
+services:
+  apiregistry:
+    image: adoptopenjdk:11-jre-hotspot
+    container_name: apiregistry
+    networks:
+      mynet:
+        ipv4_address: 172.28.1.1
+    volumes:
+      - ./apiregistry.jar:/app.jar
+    command: ["java", "-jar", "/app.jar"]
+    ports:
+      - "8761:8761"
+
+  accountservice:
+    image: adoptopenjdk:11-jre-hotspot
+    container_name: accountservice
+    networks:
+      mynet:
+        ipv4_address: 172.28.1.2
+    volumes:
+      - ./accountservice.jar:/app.jar
+    command: ["sh", "-c", "mongod --fork --logpath /var/log/mongodb.log --dbpath /data/db && java -jar /app.jar"]
+    depends_on:
+      - apiregistry
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://apiregistry:8761/eureka/
+    ports:
+      - "8081:8081"
+
+  creditservice:
+    image: adoptopenjdk:11-jre-hotspot
+    container_name: creditservice
+    networks:
+      mynet:
+        ipv4_address: 172.28.1.3
+    volumes:
+      - ./creditservice.jar:/app.jar
+    command: ["sh", "-c", "mongod --fork --logpath /var/log/mongodb.log --dbpath /data/db && java -jar /app.jar"]
+    depends_on:
+      - apiregistry
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://apiregistry:8761/eureka/
+    ports:
+      - "8082:8082"
+
+  customer:
+    image: adoptopenjdk:11-jre-hotspot
+    container_name: customer
+    networks:
+      mynet:
+        ipv4_address: 172.28.1.4
+    volumes:
+      - ./customer.jar:/app.jar
+    command: ["sh", "-c", "mongod --fork --logpath /var/log/mongodb.log --dbpath /data/db && java -jar /app.jar"]
+    depends_on:
+      - apiregistry
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://apiregistry:8761/eureka/
+    ports:
+      - "8083:8083"
+
+  gateway:
+    image: adoptopenjdk:11-jre-hotspot
+    container_name: gateway
+    networks:
+      mynet:
+        ipv4_address: 172.28.1.5
+    volumes:
+      - ./gateway.jar:/app.jar
+    command: ["sh", "-c", "mongod --fork --logpath /var/log/mongodb.log --dbpath /data/db && java -jar /app.jar"]
+    depends_on:
+      - apiregistry
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://apiregistry:8761/eureka/
+    ports:
+      - "8080:8080"
+
+  transactionservice:
+    image: adoptopenjdk:11-jre-hotspot
+    container_name: transactionservice
+    networks:
+      mynet:
+        ipv4_address: 172.28.1.6
+    volumes:
+      - ./transactionservice.jar:/app.jar
+    command: ["sh", "-c", "mongod --fork --logpath /var/log/mongodb.log --dbpath /data/db && java -jar /app.jar"]
+    depends_on:
+      - apiregistry
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://apiregistry:8761/eureka/
+    ports:
+      - "8084:8084"
+
+networks:
+  mynet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
