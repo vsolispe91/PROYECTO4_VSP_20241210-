@@ -1,0 +1,158 @@
+
+openapi: 3.0.0
+info:
+  title: Credit API
+  description: API para gestionar creditos
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Servidor local
+
+paths:
+  /credits:
+    get:
+      summary: Obtener todos los creditos
+      operationId: getAllCredits
+      responses:
+        '200':
+          description: Lista de todos los creditos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Credit'
+
+    post:
+      summary: Crear un nuevo creditos
+      operationId: createCredit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credit'
+      responses:
+        '201':
+          description: creditos creado con exito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Credit'
+
+  /credits/{id}:
+    get:
+      summary: Obtener un credito por ID
+      operationId: getCreditById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detalles del credito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Credit'
+        '404':
+          description: Credito no encontrado
+
+    delete:
+      summary: Eliminar un credito por ID
+      operationId: deleteCreditById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: credito eliminado con exito
+        '404':
+          description: credito no encontrado
+
+  /credits/consume:
+    put:
+      summary: Consumo de credito
+      operationId: consumeCredit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: ID del credito
+                consumptionAmount:
+                  type: number
+                  description: Monto del consumo
+      responses:
+        '200':
+          description: Consumo exitoso
+        '400':
+          description: Error en el consumo
+
+  /credits/pay:
+    put:
+      summary: Pago de credito
+      operationId: makePayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: ID del credito
+                paymentAmount:
+                  type: number
+                  description: Monto del pago
+      responses:
+        '200':
+          description: Pago exitoso
+        '400':
+          description: Error en el pago
+
+components:
+  schemas:
+    Credit:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificador unico del credito
+        type:
+          type: string
+          description: Tipo de credito (PERSONAL, BUSINESS)
+          enum: [PERSONAL, BUSINESS]
+        amount:
+          type: number
+          description: Monto del credito
+        creditLimit:
+          type: number
+          description: Limite de credito
+        customerId:
+          type: string
+          description: ID del cliente asociado
+
+  responses:
+    ErrorResponse:
+      description: Error en la operacion
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Descripcion del error
+                
+                

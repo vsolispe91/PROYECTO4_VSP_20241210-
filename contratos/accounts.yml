@@ -1,0 +1,196 @@
+openapi: 3.0.0
+info:
+  title: Account API
+  description: API para gestionar cuentas bancarias
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Servidor local
+
+paths:
+  /accounts:
+    get:
+      summary: Obtener todas las cuentas
+      operationId: getAllAccounts
+      responses:
+        '200':
+          description: Lista de todas las cuentas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountProduct'
+
+    post:
+      summary: Crear una nueva cuenta
+      operationId: createAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountProduct'
+      responses:
+        '201':
+          description: Cuenta creada con exito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountProduct'
+
+  /accounts/{id}:
+    get:
+      summary: Obtener una cuenta por ID
+      operationId: getAccountById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detalles de la cuenta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountProduct'
+        '404':
+          description: Cuenta no encontrada
+
+    delete:
+      summary: Eliminar una cuenta por ID
+      operationId: deleteAccount
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Cuenta eliminada con exito
+        '404':
+          description: Cuenta no encontrada
+
+  /accounts/personal:
+    post:
+      summary: Crear una cuenta bancaria de tipo personal
+      operationId: createBankAccountPersonalType
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountProduct'
+      responses:
+        '201':
+          description: Cuenta personal creada con exito
+
+  /accounts/withdraw:
+    put:
+      summary: Retiro de una cuenta
+      operationId: withdraw
+      parameters:
+        - name: accountId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: amount
+          in: query
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Retiro exitoso
+        '400':
+          description: Error en el retiro
+
+  /accounts/deposit:
+    put:
+      summary: Deposito en una cuenta
+      operationId: deposit
+      parameters:
+        - name: accountId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: amount
+          in: query
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Deposito exitoso
+        '400':
+          description: Error en el deposito
+
+  /accounts/balance/{id}:
+    get:
+      summary: Obtener el Saldo de una cuenta por ID
+      operationId: getAccountBalance
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Balance de la cuenta
+          content:
+            application/json:
+              schema:
+                type: number
+        '404':
+          description: Cuenta no encontrada
+
+components:
+  schemas:
+    AccountProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificador unico de la cuenta
+        type:
+          type: string
+          description: Tipo de cuenta (savings, checking, fixed deposit)
+        balance:
+          type: number
+          description: Saldo de la cuenta
+        holders:
+          type: array
+          items:
+            type: string
+          description: IDs de los titulares de la cuenta
+        authorizedSignatories:
+          type: array
+          items:
+            type: string
+          description: IDs de los firmantes autorizados
+        monthlyTransactionLimit:
+          type: integer
+          description: Limite de transacciones mensuales
+        maintenanceFee:
+          type: number
+          description: Tarifa de mantenimiento mensual
+
+  responses:
+    ErrorResponse:
+      description: Error en la operacion
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Descripcion del error
+                
+                

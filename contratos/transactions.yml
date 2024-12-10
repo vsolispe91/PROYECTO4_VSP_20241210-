@@ -1,0 +1,137 @@
+openapi: 3.0.0
+info:
+  title: Transaction API
+  description: API para gestionar transacciones bancarias
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Servidor local
+
+paths:
+  /transactions:
+    get:
+      summary: Obtener todas las transacciones
+      operationId: findAllTransactions
+      responses:
+        '200':
+          description: Lista de todas las transacciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+
+    post:
+      summary: Crear una nueva transaccion
+      operationId: createTransaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '201':
+          description: transaccion creada con exito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+
+  /transactions/{id}:
+    get:
+      summary: Obtener una transaccion por ID
+      operationId: findTransactionById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detalles de la transaccion
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '404':
+          description: transaccion no encontrada
+
+    delete:
+      summary: Eliminar una transaccion por ID
+      operationId: deleteTransactionById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: transaccion eliminada con exito
+        '404':
+          description: transaccion no encontrada
+
+  /transactions/account/{accountId}:
+    get:
+      summary: Obtener transacciones por ID de cuenta
+      operationId: getTransactionsByAccountId
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de transacciones de la cuenta
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        '404':
+          description: Cuenta no encontrada
+
+components:
+  schemas:
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificador unico de la transaccion
+        type:
+          type: string
+          description: Tipo de transaccion (deposit, withdrawal, payment, charge)
+        amount:
+          type: number
+          description: Monto de la transaccion
+        date:
+          type: string
+          format: date-time
+          description: Fecha de la transaccion
+        accountId:
+          type: string
+          description: ID de la cuenta bancaria asociada
+        creditId:
+          type: string
+          description: ID del credito asociado, si aplica
+
+  responses:
+    ErrorResponse:
+      description: Error en la transaccion
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: descripcion del error
+                
+                
+                

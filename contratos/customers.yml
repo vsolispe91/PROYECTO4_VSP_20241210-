@@ -1,0 +1,106 @@
+openapi: 3.0.0
+info:
+  title: Customer API
+  description: API para gestionar clientes
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Servidor local
+
+paths:
+  /customers:
+    get:
+      summary: Obtener todos los clientes
+      operationId: getAllCustomers
+      responses:
+        '200':
+          description: Lista de todos los clientes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+
+    post:
+      summary: Crear un nuevo cliente
+      operationId: createCustomer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '201':
+          description: Cliente creado con exito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+
+  /customers/{id}:
+    get:
+      summary: Obtener un cliente por ID
+      operationId: getCustomerById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detalles del cliente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '404':
+          description: Cliente no encontrado
+
+    delete:
+      summary: Eliminar un cliente por ID
+      operationId: deleteCustomerById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Cliente eliminado con exito
+        '404':
+          description: Cliente no encontrado
+
+components:
+  schemas:
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificador unico del cliente
+        name:
+          type: string
+          description: Nombre del cliente
+        type:
+          type: string
+          description: Tipo de cliente (personal o business)
+
+  responses:
+    ErrorResponse:
+      description: Error en la operacion
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Descripcion del error
+
+                
+                
+                
